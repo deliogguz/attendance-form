@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attendance Check-In</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <h2>Attendance Check-In</h2>
+  <form id="attendanceForm">
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+    <input type="hidden" id="latitude" name="latitude">
+    <input type="hidden" id="longitude" name="longitude">
+    <button type="submit">Check In</button>
+  </form>
+  <p id="status"></p>
+  <script>
+    // Ask for location when the page loads
+    window.onload = function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          document.getElementById('latitude').value = position.coords.latitude;
+          document.getElementById('longitude').value = position.coords.longitude;
+        }, function(error) {
+          document.getElementById('status').innerText = "Location access denied or unavailable.";
+        });
+      } else {
+        document.getElementById('status').innerText = "Geolocation is not supported by this browser.";
+      }
+    };
+
+    // Handle form submission
+    document.getElementById('attendanceForm').onsubmit = function(e) {
+      e.preventDefault();
+      // For now, just show the data on the page
+      var name = document.getElementById('name').value;
+      var lat = document.getElementById('latitude').value;
+      var lon = document.getElementById('longitude').value;
+      document.getElementById('status').innerText = 
+        "Thank you, " + name + "! Your location: " + lat + ", " + lon;
+      // Here, you can add code to send data to a Google Sheet or email
+    };
+  </script>
+</body>
+</html>
